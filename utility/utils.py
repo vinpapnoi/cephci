@@ -1236,7 +1236,7 @@ def write_to_file(data, abs_path):
         log.error(f"IO error hit during opening the file. Error : {err}")
 
 
-def get_cephci_config():
+def get_cephci_config(cfg_file=None):
     """
     Receives the data from ~/.cephci.yaml.
 
@@ -1244,8 +1244,9 @@ def get_cephci_config():
         (dict) configuration from ~/.cephci.yaml
 
     """
-    home_dir = os.path.expanduser("~")
-    cfg_file = os.path.join(home_dir, ".cephci.yaml")
+    if not cfg_file:
+        home_dir = os.path.expanduser("~")
+        cfg_file = os.path.join(home_dir, ".cephci.yaml")
     try:
         with open(cfg_file, "r") as yml:
             cfg = yaml.safe_load(yml)

@@ -59,6 +59,7 @@ A simple test suite wrapper that executes tests based on yaml test configuration
         (--platform <name>)
         (--suite <FILE>)...
         (--global-conf FILE | --cluster-conf FILE)
+        [--config-file FILE]
         [--cloud <openstack> | <ibmc> | <baremetal>]
         [--build <name>]
         [--inventory FILE]
@@ -105,6 +106,7 @@ Options:
   -f <tests> --filter <tests>       filter tests based on the patter
                                     eg: -f 'rbd' will run tests that have 'rbd'
   --global-conf <file>              global cloud configuration file
+  --config-file <file>              cephci.yaml configuration file
   --cluster-conf <file>             cluster configuration file
   --inventory <file>                hosts inventory file
   --cloud <cloud_type>              cloud type [default: openstack]
@@ -404,6 +406,9 @@ def run(args):
     glb_file = args.get("--global-conf")
     if args.get("--cluster-conf"):
         glb_file = args["--cluster-conf"]
+
+    config_file = args.get("--config-file")
+
 
     # Deciders
     reuse = args.get("--reuse")
@@ -916,6 +921,7 @@ def run(args):
                         parallel_tcs, rc = test_mod.run(
                             ceph_cluster=ceph_cluster_dict[cluster_name],
                             ceph_nodes=ceph_cluster_dict[cluster_name],
+                            config_file=config_file,
                             config=config,
                             parallel=parallel,
                             test_data=ceph_test_data,
@@ -941,6 +947,7 @@ def run(args):
                             ceph_cluster=ceph_cluster_dict[cluster_name],
                             ceph_nodes=ceph_cluster_dict[cluster_name],
                             config=config,
+                            config_file=config_file,                            
                             parallel=parallel,
                             test_data=ceph_test_data,
                             ceph_cluster_dict=ceph_cluster_dict,
